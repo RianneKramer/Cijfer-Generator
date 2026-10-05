@@ -1,0 +1,6 @@
+string student
+string subject
+int32 year
+float64[] exam_results
+---
+float64 result
