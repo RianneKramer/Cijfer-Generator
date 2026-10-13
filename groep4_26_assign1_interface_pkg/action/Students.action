@@ -1,0 +1,18 @@
+# Goal
+int32 year
+string[] student
+string[] subject
+int32[] nr_exams
+---
+# Result
+string[] student
+string[] subject
+int32[] year
+float64[] result
+---
+# Feedback
+string[] student
+string[] subject
+int32[] year
+int32[] received_exams
+int32[] nr_exams

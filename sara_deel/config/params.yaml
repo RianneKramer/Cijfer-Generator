@@ -1,0 +1,3 @@
+exam_result_generator_node:
+  ros__parameters:
+    interval_s: 1.0

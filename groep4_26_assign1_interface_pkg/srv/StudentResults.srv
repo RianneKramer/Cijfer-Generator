@@ -1,0 +1,8 @@
+int32 year
+string[] student
+string[] subject
+int32[] nr_exams
+float64[] result
+---
+bool success
+string message
