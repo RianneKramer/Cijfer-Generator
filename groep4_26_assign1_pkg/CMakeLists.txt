@@ -8,6 +8,19 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(groep4_26_assign1_interface_pkg REQUIRED)
+
+# DBManager
+find_package(PostgreSQL REQUIRED)
+
+add_executable(dbmanager
+        src/DBManager.cpp
+        include/groep4_26_assign1_pkg/DBManager.hpp
+        src/PSQLManager.cpp
+        include/groep4_26_assign1_pkg/PSQLManager.hpp
+)
+ament_target_dependencies(dbmanager rclcpp PostgreSQL groep4_26_assign1_interface_pkg)
+install(TARGETS dbmanager DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
