@@ -14,10 +14,12 @@ find_package(groep4_26_assign1_interface_pkg REQUIRED)
 find_package(PostgreSQL REQUIRED)
 
 add_executable(dbmanager
-        src/DBManager.cpp
-        include/groep4_26_assign1_pkg/DBManager.hpp
-        src/PSQLManager.cpp
-        include/groep4_26_assign1_pkg/PSQLManager.hpp
+        src/DatabaseManager/DBManager.cpp
+        include/groep4_26_assign1_pkg/DatabaseManager/DBManager.hpp
+        src/DatabaseManager/Database.cpp
+        include/groep4_26_assign1_pkg/DatabaseManager/Database.hpp
+        include/groep4_26_assign1_pkg/DatabaseManager/SubjectStudent.hpp
+        include/groep4_26_assign1_pkg/DatabaseManager/ExamResult.hpp
 )
 ament_target_dependencies(dbmanager rclcpp PostgreSQL groep4_26_assign1_interface_pkg)
 install(TARGETS dbmanager DESTINATION lib/${PROJECT_NAME})
