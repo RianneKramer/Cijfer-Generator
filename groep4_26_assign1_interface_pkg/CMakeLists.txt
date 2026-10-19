@@ -14,8 +14,8 @@ find_package(rosidl_default_runtime REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
         "msg/ExamResult.msg"
-        "msg/Student.msg"
         "msg/Students.msg"
+        "msg/Student.msg"
         "srv/Subjects.srv"
         "srv/SubjectResults.srv"
         "srv/StudentResults.srv"

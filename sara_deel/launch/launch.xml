@@ -1,0 +1,11 @@
+<launch>
+  <node pkg="sara_deel" exec="groep4_26_exam_result_gen_publisher_node"/>
+  <node pkg="sara_deel" exec="groep4_26_exam_result_gen_subscriber_node"
+        name="exam_result_generator_node">
+    <param from="$(find-pkg-share sara_deel)/config/params.yaml"/>
+  </node>
+  <node pkg="sara_deel" exec="groep4_26_subject_result_cal_node"
+        name="subject_result_calculator_node">
+    <param from="$(find-pkg-share sara_deel)/config/params.yaml"/>
+  </node>
+</launch>
