@@ -1,8 +1,7 @@
 /*
 --Node description: 
-...what the node is doing (functionally)... 
-When node is created the node prints "Hello you are new to ROS2" on terminal, 
-further it does nothing more than being alive
+Subject Result Calculator node receives service requests (srv:SubjectResults) to calculate the
+final grade for an exam. This result is returned to the requester.
 */ 
 
 /*
@@ -14,69 +13,67 @@ one line per change
 */
 
 
-//-- tester: Sander Gieling
-
-
-
-//--general includes 
-#include <cstdlib>
+//--general includes
+#include <string>
+#include <vector>
+#include <numeric>
 #include "rclcpp/rclcpp.hpp"
-#include <rclcpp/clock.hpp>
-#include <rclcpp/time.hpp>
 
-//--custom includes 
-//...
+//--custom includes
+#include "groep4_26_assign1_interface_pkg/srv/subject_results.hpp"
 
-//--using 
-//...
+//--using
+using SubjectResults = groep4_26_assign1_interface_pkg::srv::SubjectResults;
+using namespace std::placeholders;
 
-
-//--Node class 
-
-class Template_General : public rclcpp::Node
+class SubjectResultCalculator : public rclcpp::Node
 {
-	public:
-	//-- constuctor: 
-	Template_General() : Node("template_general_node")
-	{
-	 //--communication and timer objects: 
-	 //see templates for subcribers, action server ... 
-	 //...  
-	 
-	 //--customs functions:
-		custom_example();
-	 //... 
-	 
-	}
+public:
+  SubjectResultCalculator() : Node("subject_result_calculator_node")
+  {
+    // gewichten per aantal exams (defaults uit de design)
+    this->declare_parameter<std::vector<double>>("weights_2", {0.3, 0.7});
+    this->declare_parameter<std::vector<double>>("weights_3", {0.2, 0.3, 0.5});
+    this->declare_parameter<std::vector<double>>("weights_4", {0.1, 0.2, 0.3, 0.4});
 
-	//-- communication and timer functions 
-	//... 
+    service_ = this->create_service<SubjectResults>("subject_result",
+      std::bind(&SubjectResultCalculator::callback, this, _1, _2));
+    RCLCPP_INFO(this->get_logger(), "Subject result calculator started");
+  }
 
-	//--customs functions:
-	void custom_example()
-	{   
-		
+  void callback(const SubjectResults::Request::SharedPtr request,
+                const SubjectResults::Response::SharedPtr response)
+  {
+    const auto & grades = request->exam_results;
+    const size_t n = grades.size();
 
-		/*your custom example code */
-		 RCLCPP_INFO(this->get_logger() ,"Hello you are new to ROS2"); //code example
-		/*your custom example code */
-		my_time_ = this->now();
-		RCLCPP_INFO(this->get_logger() ,"Time in seconds: %f", my_time_.seconds()); 
+    if (n == 0) {
+      RCLCPP_WARN(this->get_logger(), "No exam results for %s / %s", request->student.c_str(), request->subject.c_str());
+      response->result = 0.0;
+      return;
+    }
 
+    if (n == 1) {
+      response->result = grades[0];
+    } else if (n <= 4) {
+      std::vector<double> weight = this->get_parameter("weights_" + std::to_string(n)).as_double_array();
 
-	}
+      double sum = 0.0;
+      for (size_t i = 0; i < n; i++){
+		sum += grades[i] * weight[i];
+	  } 
+      response->result = sum;
+	  
+    } else {
+      // 5 of meer: gelijk tellen
+      response->result = accumulate(grades.begin(), grades.end(), 0.0) / n;
+    }
 
-	//--custom variables: 
+	response->result = round(response->result * 10.0) / 10.0;
+  }
 
-	private:
-
-	//--rclcpp variables:
-	rclcpp :: Time my_time_;
-	rclcpp :: Clock my_clock_;
-		
-	//--custom variables:
-	//...
-
+private:
+  rclcpp::Service<SubjectResults>::SharedPtr service_;
 };
 
 
@@ -84,7 +81,7 @@ int main(int argc,char *argv[])
 {
 rclcpp::init(argc,argv)	;
 
-auto node = std::make_shared<Template_General>();
+auto node = std::make_shared<SubjectResultCalculator>();
 
 
 rclcpp::spin(node);
