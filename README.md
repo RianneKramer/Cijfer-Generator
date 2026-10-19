@@ -2,7 +2,7 @@
 Please keep in mind that the CMakeLists.txt, launch.xml & parameters.yaml are not yet initialized, when making a pull request to main this might cause conflicts. If you are reviewing it yourself make sure that you DO NOT overwrite the CMakeList for your own part of the project. These are shared files.
 
 ## Installation Guide
-Clone this repository to the src of your workspace
+Clone this repository to the src of your workspace's
 I.e. 
 ```
 home/usr/les_ws/src
