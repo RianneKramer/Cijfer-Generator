@@ -20,6 +20,7 @@ add_executable(dbmanager
         include/groep4_26_assign1_pkg/DatabaseManager/Database.hpp
         include/groep4_26_assign1_pkg/DatabaseManager/SubjectStudent.hpp
         include/groep4_26_assign1_pkg/DatabaseManager/ExamResult.hpp
+        include/groep4_26_assign1_pkg/DatabaseManager/StudentResult.hpp
 )
 ament_target_dependencies(dbmanager rclcpp PostgreSQL groep4_26_assign1_interface_pkg)
 install(TARGETS dbmanager DESTINATION lib/${PROJECT_NAME})

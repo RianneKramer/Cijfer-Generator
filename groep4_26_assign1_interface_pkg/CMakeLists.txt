@@ -16,6 +16,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
         "msg/ExamResult.msg"
         "msg/Student.msg"
         "msg/Students.msg"
+        "msg/StudentResult.msg"
         "srv/Subjects.srv"
         "srv/SubjectResults.srv"
         "srv/StudentResults.srv"

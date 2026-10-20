@@ -9,6 +9,7 @@
 #include <vector>
 #include "SubjectStudent.hpp"
 #include "ExamResult.hpp"
+#include "StudentResult.hpp"
 
 // c include
 extern "C" {
@@ -27,6 +28,7 @@ public:
 
     std::vector<SubjectStudent> get_subject_student_data(int year);
     bool insert_exam_result(const ExamResult& exam_result);
+    bool insert_final_result(const std::vector<StudentResult>& student_results);
 
     std::string get_last_error() const { return last_error_; }
 
