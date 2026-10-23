@@ -3,12 +3,11 @@
 this node subscriber to the student publisher and generates random exam results per student and gives that information to 
 the message ExamResult and publishes it
 
-!Vraag om te stellen, hoeveel decimalen mag cijfer op eindigen!!
-
 to check -->
-1. run launch file first: ros2 launch sara_deel launch.xml
-2. then echo (nothing will show the first time!): ros2 topic echo /exam_result
-3. then restart the launch file: ros2 launch sara_deel launch.xml
+ros2 run groep4_26_assign1_pkg groep4_26_exam_result_gen_node
+test message:
+ros2 topic pub --once /students groep4_26_assign1_interface_pkg/msg/Students \
+  "{student: [{student: 'John', subject: 'Math', year: 2023, nr_exams: 1}, {student: 'Jane', subject: 'Science', year: 2024, nr_exams: 2}]}"
 
 */ 
 
@@ -17,6 +16,7 @@ to check -->
 one line per change 
 (1) created 31.3.2025: developer-Tilmann Koster reviewer(s)-Niek Ottens 
 (2) changed 13.10.2026 developer-Sara Sotomayor Amador
+(3) changed 22.10.2026 developer-Sara Sotomayor Amador --> new working version with tuple
 ...
 */
 
@@ -25,8 +25,8 @@ one line per change
 #include "rclcpp/rclcpp.hpp"
 #include <map>
 #include <string>
-#include <vector>
 #include <random>
+#include <tuple>
 
 //--custom includes 
 #include "groep4_26_assign1_interface_pkg/msg/student.hpp"
@@ -47,8 +47,12 @@ class ExamResultSubscriber : public rclcpp::Node
     this->declare_parameter<double>("interval_s", 1.0);
     double interval = this->get_parameter("interval_s").as_double();
 
+    // topic name
+    this->declare_parameter<std::string>("students_topic", "students");
+    std::string students_topic = this->get_parameter("students_topic").as_string(); 
+
     subscriber_theanswer_ = this->create_subscription<groep4_26_assign1_interface_pkg::msg::Students>(
-      "the_answer", 10,
+      students_topic, 10,
       std::bind(&ExamResultSubscriber::subscriber_theanswer_callback, this, _1));
 
     publisher_result_ = this->create_publisher<groep4_26_assign1_interface_pkg::msg::ExamResult>("exam_result", 10);
@@ -63,29 +67,24 @@ class ExamResultSubscriber : public rclcpp::Node
   {
     for (const auto & s : msg->student) {
       // emplace doesn't override if student already exists --> doesn't reset the counter
-      students_.emplace(s.student, Entry{s.subject, s.nr_exams, s.nr_exams});
+      students_.emplace(std::make_tuple(s.student, s.subject, s.year), Entry{s.nr_exams, s.nr_exams});
     }
   }
 
   void generate_tick()
 {
-  for (auto & [name, e] : students_) {
-    if (e.remaining <= 0 || e.subjects.empty()) continue;
-
-    //range of the subjects of a student
-    std::uniform_int_distribution<size_t> dist(0, e.subjects.size() - 1);
+  for (auto & [key, e] : students_) {
+    if (e.remaining <= 0) continue;
 
     //filling message ExamResult
     groep4_26_assign1_interface_pkg::msg::ExamResult r;
     r.header.stamp = this->now();
-    r.student = name;
-    r.subject = e.subjects[dist(rng_)];
+    r.student = std::get<0>(key);
+    r.subject = std::get<1>(key);
     r.exam_result = grade_(rng_);
     r.exam_sequence_nr = e.total - e.remaining + 1;
 
-    // publishing
-    RCLCPP_DEBUG(this->get_logger(), "%s: %s -> %.1f (nr %d)",
-            r.student.c_str(), r.subject.c_str(), r.exam_result, r.exam_sequence_nr);
+    //publish
     publisher_result_->publish(r);
     e.remaining--;
   }
@@ -102,15 +101,12 @@ private:
   //--custom variables:
 
   struct Entry {
-    std::vector<std::string> subjects;
     int remaining; //remaining subjects to fill with a result
     int total; //total subjects
   };
 
-  //lookup table, key = student name
-  std::map<std::string, Entry> students_;
-
-  
+  //lookup table, key = (student, subject, year)
+  std::map<std::tuple<std::string, std::string, int>, Entry> students_;
     
 };
 

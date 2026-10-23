@@ -1,9 +1,0 @@
-exam_result_generator_node:
-  ros__parameters:
-    interval_s: 1.0
-
-subject_result_calculator_node:
-  ros__parameters:
-    weights_2: [0.3, 0.7]
-    weights_3: [0.2, 0.3, 0.5]
-    weights_4: [0.1, 0.2, 0.3, 0.4]
