@@ -83,7 +83,26 @@ void DBManager::subject_server_call(SubjectsSrv::Request::SharedPtr request, con
 
 void DBManager::exam_result_server_call(StudentResultsSrv::Request::SharedPtr request, StudentResultsSrv::Response::SharedPtr response)
 {
+    StudentResult student_result;
+    std::vector<StudentResult> student_result_vector;
 
+    for (auto result : request->student_result)
+    {
+        student_result.student = result.student;
+        student_result.subject = result.subject;
+        student_result.result = result.result;
+
+        student_result_vector.push_back(student_result);
+    }
+
+    if (!psql_.insert_final_result(student_result_vector))
+    {
+        RCLCPP_WARN(get_logger(), "Failed to (partially or fully) insert final result into database: %s", psql_.get_last_error().c_str());
+        response->success = false;
+        return;
+    }
+    RCLCPP_INFO(get_logger(), "Final results inserted into database");
+    response->success = true;
 }
 
 int main(int argc, char **argv)

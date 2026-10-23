@@ -294,3 +294,60 @@ bool Database::insert_exam_result(const ExamResult& exam_result)
 
     return true;
 }
+
+bool Database::insert_final_result(const std::vector<StudentResult>& student_results)
+{
+    for (auto student_result : student_results)
+    {
+        constexpr auto query =
+            "SELECT id "
+            "FROM subject_student "
+            "WHERE student = $1 "
+            "AND subject = $2;"
+        ;
+
+        const char* params[] = {
+            student_result.student.c_str(),
+            student_result.subject.c_str()
+        };
+
+        PGresult* res = PQexecParams(conn_, query, 2, nullptr, params, nullptr, nullptr, 0);
+
+        if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) != 1)
+        {
+            std::cerr << "Subject student not found or not unique" << std::endl;
+            last_error_ = PQerrorMessage(conn_);
+            PQclear(res);
+            return false;
+        }
+
+        const std::string sub_stu_id = PQgetvalue(res, 0, 0);
+        PQclear(res);
+
+        constexpr auto result_query =
+            "UPDATE final_result "
+            "SET final_result = $1 "
+            "WHERE sub_stu_id = $2;"
+        ;
+
+        const std::string final_res_str = std::to_string(student_result.result);
+
+        const char* result_params[] = {
+            final_res_str.c_str(),
+            sub_stu_id.c_str()
+        };
+
+        res = PQexecParams(conn_, result_query, 2, nullptr, result_params, nullptr, nullptr, 0);
+
+        if (PQresultStatus(res) != PGRES_COMMAND_OK)
+        {
+            std::cerr << "Failed to insert final result" << std::endl;
+            last_error_ = PQerrorMessage(conn_);
+            PQclear(res);
+            return false;
+        }
+
+        PQclear(res);
+    }
+    return true;
+}
