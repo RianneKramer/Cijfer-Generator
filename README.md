@@ -2,7 +2,7 @@
 Please keep in mind that the CMakeLists.txt, launch.xml & parameters.yaml are not yet initialized, when making a pull request to main this might cause conflicts. If you are reviewing it yourself make sure that you DO NOT overwrite the CMakeList for your own part of the project. These are shared files.
 
 ## Installation Guide
-Clone this repository to the src of your workspace's
+Clone this repository to the src of your workspace
 I.e. 
 ```
 home/usr/les_ws/src
@@ -24,3 +24,7 @@ Version progression goes like Major.Minor.Patch
 `group4_26_assign1_pkg` is the packages for the ros2 nodes, if you want to make use of header files `include/group4_26_assign1_pkg` can be used. This pkg also includes a launch and parameter file.
 
 `group4_26_assign1_interface_pkg` is the package for the ros2 custom interface.
+
+topic names:
+/students for groep4_26_exam_result_gen_node
+/subject_result for groep4_26_subject_result_cal_node

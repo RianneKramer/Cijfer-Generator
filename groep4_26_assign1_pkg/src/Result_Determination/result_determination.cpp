@@ -49,7 +49,7 @@ public:
   : Node("result_determination")
   {
     result_client_ = create_client<groep4_26_assign1_interface_pkg::srv::SubjectResults>(
-      "subject_results");
+      "subject_result");
     student_publisher_ = create_publisher<groep4_26_assign1_interface_pkg::msg::Students>(
       "students", 10);
     exam_subscription_ = create_subscription<groep4_26_assign1_interface_pkg::msg::ExamResult>(

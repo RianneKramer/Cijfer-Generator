@@ -36,10 +36,12 @@ public:
   Closing()
   : Node("closing")
   {
-    closing_years_ = declare_parameter<std::vector<int64_t>>("closing_years", {});
-    subjects_client_ = create_client<groep4_26_assign1_interface_pkg::srv::Subjects>("subjects");
+    closing_years_ = declare_parameter<std::vector<int64_t>>(
+      "closing_years", std::vector<int64_t>{});
+    subjects_client_ = create_client<groep4_26_assign1_interface_pkg::srv::Subjects>(
+      "subject_service");
     results_client_ = create_client<groep4_26_assign1_interface_pkg::srv::StudentResults>(
-      "student_results");
+      "student_result_service");
     result_action_client_ = rclcpp_action::create_client<Action>(this, "students");
     action_server_ = rclcpp_action::create_server<Action>(
       this, "closing",
