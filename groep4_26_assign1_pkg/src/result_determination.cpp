@@ -141,7 +141,7 @@ private:
       groep4_26_assign1_interface_pkg::msg::Student student;
       student.header.stamp = message.header.stamp;
       student.student = record.student;
-      student.subject.push_back(record.subject);
+      student.subject = record.subject;
       student.year = state->year;
       student.nr_exams = record.nr_exams;
       message.student.push_back(std::move(student));

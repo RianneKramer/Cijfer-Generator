@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "groep4_26_assign1_interface_pkg/action/students.hpp"
+#include "groep4_26_assign1_interface_pkg/msg/student_result.hpp"
 #include "groep4_26_assign1_interface_pkg/srv/student_results.hpp"
 #include "groep4_26_assign1_interface_pkg/srv/subjects.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -193,30 +194,17 @@ private:
 
     auto request = std::make_shared<groep4_26_assign1_interface_pkg::srv::StudentResults::Request>();
     request->year = state->year;
-    request->student = calculated->student;
-    request->subject = calculated->subject;
-    request->result = calculated->result;
     for (size_t index = 0; index < calculated->student.size(); ++index) {
       if (calculated->year[index] != state->year) {
         RCLCPP_ERROR(get_logger(), "Calculated result has an unexpected year");
         finish_aborted(state);
         return;
       }
-      size_t position = state->student.size();
-      for (size_t record_index = 0; record_index < state->student.size(); ++record_index) {
-        if (state->student[record_index] == calculated->student[index] &&
-          state->subject[record_index] == calculated->subject[index])
-        {
-          position = record_index;
-          break;
-        }
-      }
-      if (position == state->student.size()) {
-        RCLCPP_ERROR(get_logger(), "Calculated result does not match a retrieved student record");
-        finish_aborted(state);
-        return;
-      }
-      request->nr_exams.push_back(state->nr_exams[position]);
+      groep4_26_assign1_interface_pkg::msg::StudentResult student_result;
+      student_result.student = calculated->student[index];
+      student_result.subject = calculated->subject[index];
+      student_result.result = calculated->result[index];
+      request->student_result.push_back(std::move(student_result));
     }
 
     results_client_->async_send_request(request,
@@ -230,7 +218,7 @@ private:
         try {
           const auto response = future.get();
           if (!response->success) {
-            RCLCPP_ERROR(get_logger(), "Could not store results: %s", response->message.c_str());
+            RCLCPP_ERROR(get_logger(), "Student results service rejected the results");
             finish_aborted(state);
             return;
           }
