@@ -17,16 +17,36 @@ Building can be done in the installation directory:
 cd ws/install
 colcon build
 ```
-### Starting the Project
+### Starting and Running the Project
 
 To start the project, run the following command:
 ```bash
+docker compose up -d
 ros2 launch groep4_26_assign1_pkg launch.xml
+```
+
+To send a goal to the closing action server, run the following command:
+```bash
+ros2 action send_goal /closing \
+  groep4_26_assign1_interface_pkg/action/Students \
+  "{year: 2024}" --feedback
 ```
 
 ## Developer Guide
 ### Project Structure
 `groep4_26_assign1_pkg` is the package for the ros2 nodes, if you want to make use of header files `include/groep4_26_assign1_pkg` can be used. This pkg also includes a launch and parameter file.
 All nodes have their own directory within the package.
+
+The following topic, services and actions are available:
+- Topics:
+  - `/exam_result`
+  - `/students`
+- Services:
+  - `/student_result_service`
+  - `/subject_result`
+  - `/subject_service`
+- Actions:
+  - `/closing`
+  - `/students`
 
 `groep4_26_assign1_interface_pkg` is the package for the ros2 custom interface used in this project.
