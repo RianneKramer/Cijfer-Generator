@@ -24,7 +24,6 @@ add_executable(dbmanager
         include/groep4_26_assign1_pkg/DatabaseManager/StudentResult.hpp
 )
 ament_target_dependencies(dbmanager rclcpp PostgreSQL groep4_26_assign1_interface_pkg)
-install(TARGETS dbmanager DESTINATION lib/${PROJECT_NAME})
 
 # Exam result generator
 add_executable(groep4_26_exam_result_gen_node src/ExamResultGenerator/groep4_26_exam_result_gen_node.cpp)
@@ -42,11 +41,12 @@ add_executable(closing src/Closing/closing.cpp)
 ament_target_dependencies(closing rclcpp rclcpp_action groep4_26_assign1_interface_pkg)
 
 install(TARGETS
-  groep4_26_exam_result_gen_node
-  groep4_26_subject_result_cal_node
-  result_determination
-  closing
-  DESTINATION lib/${PROJECT_NAME}
+        dbmanager
+        groep4_26_exam_result_gen_node
+        groep4_26_subject_result_cal_node
+        result_determination
+        closing
+        DESTINATION lib/${PROJECT_NAME}
 )
 
 install(DIRECTORY launch parameters
