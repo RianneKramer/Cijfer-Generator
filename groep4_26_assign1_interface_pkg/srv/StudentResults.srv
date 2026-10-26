@@ -1,0 +1,4 @@
+int32 year
+StudentResult[] student_result
+---
+bool success

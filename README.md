@@ -24,3 +24,7 @@ Version progression goes like Major.Minor.Patch
 `group4_26_assign1_pkg` is the packages for the ros2 nodes, if you want to make use of header files `include/group4_26_assign1_pkg` can be used. This pkg also includes a launch and parameter file.
 
 `group4_26_assign1_interface_pkg` is the package for the ros2 custom interface.
+
+topic names:
+/students for groep4_26_exam_result_gen_node
+/subject_result for groep4_26_subject_result_cal_node
