@@ -7,6 +7,11 @@ The 'Cijfer Generator' is a ROS2 project that generates exam results and calcula
 To install this project, you need to have ROS2 and Docker Engine or Desktop installed on your system. Follow the instructions on the [official ROS2 website](https://docs.ros.org/en/jazzy/Installation/Alternatives/Ubuntu-Development-Setup.html) to install ROS2.
 To install Docker Engine, visit the [official Docker website](https://docs.docker.com/engine/install/ubuntu/) and follow the installation instructions.
 
+For the DBManager PostgreSQL is used, to make sure the C-library works also download and install `libpq-dev`:
+```bash
+sudo apt install libpq-dev
+```
+
 ### Cloning and Building
 Clone this repository to the src directory of your ROS2 workspace:
 ```bash
