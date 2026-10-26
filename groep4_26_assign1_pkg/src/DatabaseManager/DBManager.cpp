@@ -79,6 +79,7 @@ void DBManager::subject_server_call(SubjectsSrv::Request::SharedPtr request, con
         response->year.push_back(record.year);
         response->nr_exams.push_back(record.nr_exams);
     }
+    RCLCPP_INFO(get_logger(), "Successfully retrieved subject student data for year: %d", request->year);
 }
 
 void DBManager::exam_result_server_call(StudentResultsSrv::Request::SharedPtr request, StudentResultsSrv::Response::SharedPtr response)
