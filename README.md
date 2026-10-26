@@ -1,26 +1,32 @@
 # README
-Please keep in mind that the CMakeLists.txt, launch.xml & parameters.yaml are not yet initialized, when making a pull request to main this might cause conflicts. If you are reviewing it yourself make sure that you DO NOT overwrite the CMakeList for your own part of the project. These are shared files.
+
+The 'Cijfer Generator' is a ROS2 project that generates exam results and calculates subject results based on student grades.
 
 ## Installation Guide
-Clone this repository to the src of your workspace
-I.e. 
-```
-home/usr/les_ws/src
-```
-Building can be done in the install folder so:
+### Prerequisites
+To install this project, you need to have ROS2 and Docker Engine or Desktop installed on your system. Follow the instructions on the [official ROS2 website](https://docs.ros.org/en/jazzy/Installation/Alternatives/Ubuntu-Development-Setup.html) to install ROS2.
+To install Docker Engine, visit the [official Docker website](https://docs.docker.com/engine/install/ubuntu/) and follow the installation instructions.
+
+### Cloning and Building
+Clone this repository to the src directory of your ROS2 workspace:
 ```bash
-cd les_ws/install
+git clone https://github.com/RianneKramer/Cijfer-Generator.git
+```
+Building can be done in the installation directory:
+```bash
+cd ws/install
 colcon build
+```
+### Starting the Project
+
+To start the project, run the following command:
+```bash
+ros2 launch groep4_26_assign1_pkg launch.xml
 ```
 
 ## Developer Guide
-During the developing process all three members have their own development branch.
-Be sure to occasionally push to your respective branches.
-Your branch is named like: yourname.0.0.1
-If you want to make a new branch you can use yourname.0.0.2
-Version progression goes like Major.Minor.Patch
-
 ### Project Structure
-`group4_26_assign1_pkg` is the packages for the ros2 nodes, if you want to make use of header files `include/group4_26_assign1_pkg` can be used. This pkg also includes a launch and parameter file.
+`groep4_26_assign1_pkg` is the package for the ros2 nodes, if you want to make use of header files `include/groep4_26_assign1_pkg` can be used. This pkg also includes a launch and parameter file.
+All nodes have their own directory within the package.
 
-`group4_26_assign1_interface_pkg` is the package for the ros2 custom interface.
+`groep4_26_assign1_interface_pkg` is the package for the ros2 custom interface used in this project.
