@@ -1,3 +1,19 @@
 <launch>
+  <node pkg="groep4_26_assign1_pkg" exec="dbmanager"/>
 
+  <node pkg="groep4_26_assign1_pkg" exec="groep4_26_exam_result_gen_node"
+        name="exam_result_generator_node">
+    <param from="$(find-pkg-share groep4_26_assign1_pkg)/parameters/parameters.yaml"/>
+  </node>
+
+  <node pkg="groep4_26_assign1_pkg" exec="groep4_26_subject_result_cal_node"
+        name="subject_result_calculator_node">
+    <param from="$(find-pkg-share groep4_26_assign1_pkg)/parameters/parameters.yaml"/>
+  </node>
+
+    <node pkg="groep4_26_assign1_pkg" exec="result_determination"
+      name="result_determination"/>
+
+    <node pkg="groep4_26_assign1_pkg" exec="closing"
+      name="closing"/>
 </launch>
