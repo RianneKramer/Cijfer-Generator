@@ -91,7 +91,7 @@ bool Database::check_tables()
         return false;
     }
 
-    std::cout << "Tables initialized successfully" << std::endl;
+    // std::cout << "Tables initialized successfully" << std::endl;
     return true;
 }
 
@@ -162,8 +162,8 @@ bool Database::fill_subject_student_table()
 
     if (count > 0)
     {
-        std::cout << "Table is not empty: "
-                  << count << std::endl;
+        // std::cout << "Table is not empty: "
+        //           << count << std::endl;
 
         PQclear(res);
         return true;
